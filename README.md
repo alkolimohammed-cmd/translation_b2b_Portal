@@ -16,26 +16,26 @@
 
 1. **Клонируйте репозиторий и перейдите в папку проекта:**
    ```bash
-   cd ~/translation-b2b-portal
+   cd ~/translation-b2b-portal```
 2. **Создайте и активируйте виртуальное окружение:**
-   python3 -m venv .venv
-   source .venv/bin/activate
-3. **Создайте и активируйте виртуальное окружение:**
-   python3 -m venv .venv
-   source .venv/bin/activate
+  ``` python3 -m venv .venv
+   source .venv/bin/activate```
+3. **Установите все необходимые зависимости:**
+  ``` pip install -r requirements.txt```
 4. **Запустите сервер разработки Flask:**
-   python3 app/main.py
- ## 📡 Примеры использования API
+  ``` python3 app/main.py```
+## 📡 Примеры использования API
 Приложение предоставляет эндпоинт /api/calculate для расчета стоимости по количеству слов.
- ## Пример запроса (POST):
-   curl -X POST [http://127.0.0.1:5000/api/calculate](http://127.0.0.1:5000/api/calculate) \
+## Пример запроса (POST):
+   ```curl -X POST [http://127.0.0.1:5000/api/calculate](http://127.0.0.1:5000/api/calculate) \
      -H "Content-Type: application/json" \
-     -d '{"text": "Hello world, this is our amazing translation B2B platform", "lang": "en"}'
- ## Пример ответа от бэкенда:
-   {
+     -d '{"text": "Hello world, this is our amazing translation B2B platform", "lang": "en"}'```
+## Пример ответа от бэкенда:
+  ``` {
   "rate_per_word": 4.0,
   "selected_language": "en",
   "status": "success",
   "total_price": 36.0,
   "words_found": 9
-}
+}```
+
