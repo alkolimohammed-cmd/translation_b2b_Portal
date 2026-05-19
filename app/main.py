@@ -14,7 +14,7 @@ TARIF_RATES = {
 @app.route('/')
 def home():
     """Главная страница портала"""
-    return "<h1>Бюро переводов: Бэкенд калькулятора успешно запущен!</h1>"
+    return render_template('index.html')
 
 @app.route('/api/calculate', methods=['POST'])
 def calculate():

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yamani Translation Portal — Калькулятор</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Yamani Translation Portal</h1>
+        <p class="subtitle">B2B-система мгновенного расчета стоимости перевода</p>
+        
+        <div class="calculator-card">
+            <label for="text-input">Введите или вставьте текст для перевода:</label>
+            <textarea id="text-input" placeholder="Начните вводить текст здесь..."></textarea>
+            
+            <div class="controls">
+                <div class="select-group">
+                    <label for="lang-select">Целевой язык:</label>
+                    <select id="lang-select">
+                        <option value="en">Английский (4.0 руб/слово)</option>
+                        <option value="ar">Арабский (6.0 руб/слово)</option>
+                        <option value="zh">Китайский (8.0 руб/слово)</option>
+                    </select>
+                </div>
+                
+                <button id="calc-btn">Рассчитать стоимость</button>
+            </div>
+        </div>
+
+        <div id="result-card" class="result-card hidden">
+            <h3>Результат расчета:</h3>
+            <div class="result-grid">
+                <div class="result-item"><strong>Найдено слов:</strong> <span id="res-words">0</span></div>
+                <div class="result-item"><strong>Тариф за слово:</strong> <span id="res-rate">0</span> руб.</div>
+                <div class="result-item total"><strong>Итоговая цена:</strong> <span id="res-total">0</span> руб.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calc-btn').addEventListener('click', async () => {
+            const text = document.getElementById('text-input').value;
+            const lang = document.getElementById('lang-select').value;
+            const btn = document.getElementById('calc-btn');
+            
+            if (!text.trim()) {
+                alert('Пожалуйста, введите текст для расчета.');
+                return;
+            }
+
+            // Визуальный фидбек: меняем текст кнопки на время запроса
+            btn.innerText = 'Считаю...';
+            btn.disabled = true;
+
+            try {
+                // Отправляем POST-запрос на наш бэкенд
+                const response = await fetch('/api/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: text, lang: lang })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // Подставляем данные из JSON-ответа в HTML-элементы
+                    document.getElementById('res-words').innerText = data.words_found;
+                    document.getElementById('res-rate').innerText = data.rate_per_word;
+                    document.getElementById('res-total').innerText = data.total_price;
+                    
+                    // Показываем карточку с результатом
+                    document.getElementById('result-card').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Ошибка при обращении к API:', error);
+                alert('Произошла ошибка при расчете. Проверьте консоль.');
+            } finally {
+                // Возвращаем кнопку в исходное состояние
+                btn.innerText = 'Рассчитать стоимость';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
